@@ -9,9 +9,11 @@
 
 2. Clone from the Fork
 
-3. yarn install (will install all dependencies)
+3. Install node and yarn globally
 
-4. yarn dev (will start the dev server)
+4. yarn install (will install all dependencies)
+
+5. yarn dev (will start the dev server)
 
 **Submitting the Code -**
 
