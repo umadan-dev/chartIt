@@ -8,9 +8,10 @@ function Next() {
   const [isActive, setActive] = useState(true);
   const [buttonText, setButtonText] = useState('Fetch Data Stream');
   const [listenerCount, setCount] = useState(0);
-
+  const [packetData, setPacketData] = useState(null)
   const getData = () => {
     ipcRenderer.on("device-data",(event,packets)=>{
+      setPacketData(packets)
       console.log(packets)
       setCount(listenerCount+1)
     })
@@ -49,7 +50,7 @@ function Next() {
 
       <div id="chartIt"> 
       <span className='mt-4 w-full flex-wrap flex justify-center'>⚡  Render Chart Here ⚡</span> 
-      <Chart />
+      <Chart data={packetData} />
       </div> 
 
       <div className='mt-10 w-full flex-wrap flex justify-center'>
