@@ -1,34 +1,41 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-const {ipcRenderer} = require('electron')
-import Chart from './../components/ChartComponent';
+import React, { useState } from "react";
+import Head from "next/head";
+import Link from "next/link";
+const { ipcRenderer } = require("electron");
+import Chart from "./../components/ChartComponent";
+import { getObjHandler } from "../utils/index";
+import { stackBarName } from "../utils/constant";
 
 function Next() {
   const [isActive, setActive] = useState(true);
-  const [buttonText, setButtonText] = useState('Fetch Data Stream');
+  const [buttonText, setButtonText] = useState("Fetch Data Stream");
   const [listenerCount, setCount] = useState(0);
+  const [chartData, setChartData] = useState([]);
 
   const getData = () => {
-    ipcRenderer.on("device-data",(event,packets)=>{
-      console.log(packets)
-      setCount(listenerCount+1)
-    })
-
-    ipcRenderer.on("fetch-data",(event,message)=>{
-      if(message=='completed'){
-        setActive(true)
-        setButtonText('Fetch Data Stream')
+    ipcRenderer.on("device-data", (event, packets) => {
+      const chartDataClone = JSON.parse(JSON.stringify(chartData));
+      for (let i = 0; i < packets.length; i++) {
+        chartDataClone.push(getObjHandler(packets[i]));
       }
-    }) 
-  }
+      setChartData(chartDataClone);
+      setCount(listenerCount + 1);
+    });
+
+    ipcRenderer.on("fetch-data", (event, message) => {
+      if (message == "completed") {
+        setActive(true);
+        setButtonText("Fetch Data Stream");
+      }
+    });
+  };
 
   const fetchData = () => {
     setActive(false);
-    ipcRenderer.invoke('fetch-data').then(() => {
-      setButtonText('Fetching In Progress')
-    })
-    if(listenerCount==0) getData();
+    ipcRenderer.invoke("fetch-data").then(() => {
+      setButtonText("Fetching In Progress");
+    });
+    if (listenerCount == 0) getData();
   };
 
   return (
@@ -42,15 +49,24 @@ function Next() {
       </div>
 
       <div className='mt-4 w-full flex-wrap flex justify-center'>
-      <button className={isActive ? 'btn-blue': 
-      'bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'} 
-      onClick={fetchData}>{buttonText}</button>
+        <button
+          className={
+            isActive
+              ? "btn-blue"
+              : "bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed"
+          }
+          onClick={fetchData}
+        >
+          {buttonText}
+        </button>
       </div>
 
-      <div id="chartIt"> 
-      <span className='mt-4 w-full flex-wrap flex justify-center'>⚡  Render Chart Here ⚡</span> 
-      <Chart />
-      </div> 
+      <div id='chartIt'>
+        <span className='mt-4 w-full flex-wrap flex justify-center'>
+          ⚡ Render Chart Here ⚡
+        </span>
+        <Chart data={chartData} heading={stackBarName} />
+      </div>
 
       <div className='mt-10 w-full flex-wrap flex justify-center'>
         <Link href='/home'>
@@ -58,7 +74,7 @@ function Next() {
         </Link>
       </div>
     </React.Fragment>
-  )
+  );
 }
 
-export default Next
+export default Next;
