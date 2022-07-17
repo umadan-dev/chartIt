@@ -7,10 +7,10 @@ export interface IInitStateAction {
 }
 
 export const reducer = (state: object, action: IInitStateAction) => {
-    if (state[action.packet].length > 250) {
+    if (state[action.packet].length > 4000) {
         let deepCloned = JSON.parse(JSON.stringify(state[action.packet]));
         deepCloned.reverse();
-        for (let i = 250; i < deepCloned.length; i++) deepCloned.pop();
+        for (let i = 4000; i < deepCloned.length; i++) deepCloned.pop();
         return {
             ...state,
             [action.packet]: deepCloned.reverse(),
