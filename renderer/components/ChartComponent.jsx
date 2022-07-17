@@ -15,7 +15,6 @@ export default function Chart({ packets }) {
 
   useEffect(() => {
     if (idxx < 1000) {
-      //removing this if condition will show graph for all the packets
       let arr = packets.map((packet, index) => {
         return { id: idxx + index, values: packet[0] };
       });
@@ -29,7 +28,7 @@ export default function Chart({ packets }) {
   return (
     <div className="w-full h-fit border-blue-800 border-2 mt-20">
       <div className="mt-10">
-        <h1 className="ml-7 font-bold">Channel 0</h1>
+        <h1 className="ml-7 font-bold">Channel 1</h1>
         <ResponsiveContainer width="100%" aspect={3}>
           <LineChart
             data={packetArray}
