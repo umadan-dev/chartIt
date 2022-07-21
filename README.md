@@ -44,7 +44,8 @@ In renderer/components there is a basic structure of a Chart you need to impleme
 * To emulate the realtime data from the device we are providing the data to frontend i.e. (next.jsx screen) at the same rate as we get from the device.
 * Device has eight EEG channels. A single packet from the device contains an array of size 8. Per secod the device return 250 packets. 
 
-**Compulsory Task 1** - Plot the realtime EEG data for one of the eight channels with timestamp on x-axis.
+**Compulsory Task 1** - Plot the realtime EEG data for one of the eight channels with timestamp on x-axis. Plot at least 5 sec of data at any given moment.
+The chart must be updated in realtime
 
 Hint 1 - Rerendering 250 packets per second won't be possible by our machines. To simplify the problem we are returning an array of arrays with 10 packets per 40ms, Therefore each second you will get 25 array of arrays each containing 10 packets. 
 Data will look like this- 
