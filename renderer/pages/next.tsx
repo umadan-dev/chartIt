@@ -1,41 +1,36 @@
-import React, { useReducer, useState } from 'react'
-import Head from 'next/head'
-import Link from 'next/link'
-import { Chart } from './../components/ChartComponent'
-import {
-  dispatchPacket,
-  initState,
-  namesArray,
-  reducer,
-} from '../components/Assets'
-const { ipcRenderer } = require('electron')
+import React, { useState } from "react";
+import Head from "next/head";
+import Link from "next/link";
+const { ipcRenderer } = require("electron");
+import { Chart } from "./../components/ChartComponent";
+import { initState, useQueue } from "../components/useQueue";
 
 function Next() {
-  const [isActive, setActive] = useState(true)
-  const [buttonText, setButtonText] = useState('Fetch Data Stream')
-  const [listenerCount, setCount] = useState(0)
-  const [state, dispatch] = useReducer(reducer, initState)
+  const [isActive, setActive] = useState(true);
+  const [buttonText, setButtonText] = useState("Fetch Data Stream");
+  const [listenerCount, setCount] = useState(0);
+  const { handleDispatcher, data } = useQueue();
 
   const getData = () => {
-    ipcRenderer.on('device-data', (_event, packets) => {
-      dispatchPacket(packets, dispatch)
-      setCount(prevCount => prevCount + 1)
-    })
-    ipcRenderer.on('fetch-data', (_event, message) => {
-      if (message == 'completed') {
-        setActive(true)
-        setButtonText('Fetch Data Stream')
+    ipcRenderer.on("device-data", (_event, packets) => {
+      handleDispatcher(packets);
+      setCount((prevCount) => prevCount + 1);
+    });
+    ipcRenderer.on("fetch-data", (_event, message) => {
+      if (message == "completed") {
+        setActive(true);
+        setButtonText("Fetch Data Stream");
       }
-    })
-  }
+    });
+  };
 
   const fetchData = () => {
-    setActive(false)
-    ipcRenderer.invoke('fetch-data').then(() => {
-      setButtonText('Fetching In Progress')
-    })
-    if (listenerCount == 0) getData()
-  }
+    setActive(false);
+    ipcRenderer.invoke("fetch-data").then(() => {
+      setButtonText("Fetching In Progress");
+    });
+    if (listenerCount == 0) getData();
+  };
 
   return (
     <React.Fragment>
@@ -51,8 +46,8 @@ function Next() {
         <button
           className={
             isActive
-              ? 'btn-blue'
-              : 'bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
+              ? "btn-blue"
+              : "bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed"
           }
           onClick={fetchData}
         >
@@ -64,8 +59,8 @@ function Next() {
         <span className="mt-4 w-full flex-wrap flex justify-center">
           ⚡ Render Chart Here ⚡
         </span>
-        {namesArray.map(e => (
-          <Chart key={e} data={state[e]} />
+        {Object.keys(initState).map((e) => (
+          <Chart key={e} data={Object.values(data[e].elements)} />
         ))}
       </div>
 
@@ -75,7 +70,7 @@ function Next() {
         </Link>
       </div>
     </React.Fragment>
-  )
+  );
 }
 
-export default Next
+export default Next;
