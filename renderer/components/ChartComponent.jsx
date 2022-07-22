@@ -43,7 +43,7 @@ export default function Chart({ packets, channelNum }) {
           >
             <XAxis dataKey="id" interval={"preserveStartEnd"} />
             <ReferenceLine y={0} stroke="blue" />
-            <YAxis type="number" domain={[-50, 50]} allowDataOverflow={true} />
+            <YAxis type="number" domain={[-50, 50]} allowDataOverflow={false} />
             <Tooltip
               contentStyle={{ backgroundColor: "white", color: "black" }}
             />

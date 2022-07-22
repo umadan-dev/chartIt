@@ -9,6 +9,7 @@ function Next() {
   const [buttonText, setButtonText] = useState("Fetch Data Stream");
   const [listenerCount, setCount] = useState(0);
   const [packets, setPackets] = useState([]);
+  const [run, setRun] = useState(true);
 
   const getData = () => {
     ipcRenderer.on("device-data", (event, packets) => {
@@ -59,21 +60,25 @@ function Next() {
         <span className="mt-4 w-full flex-wrap flex justify-center">
           ⚡ Render Chart Here ⚡
         </span>
-        <div className="">
-          <Chart packets={packets} channelNum={0} />
-          <Chart packets={packets} channelNum={1} />
-          <Chart packets={packets} channelNum={2} />
-          <Chart packets={packets} channelNum={3} />
-          <Chart packets={packets} channelNum={4} />
-          <Chart packets={packets} channelNum={5} />
-          <Chart packets={packets} channelNum={6} />
-          <Chart packets={packets} channelNum={7} />
-        </div>
+        {run && (
+          <div className="">
+            <Chart packets={packets} channelNum={0} />
+            <Chart packets={packets} channelNum={1} />
+            <Chart packets={packets} channelNum={2} />
+            <Chart packets={packets} channelNum={3} />
+            <Chart packets={packets} channelNum={4} />
+            <Chart packets={packets} channelNum={5} />
+            <Chart packets={packets} channelNum={6} />
+            <Chart packets={packets} channelNum={7} />
+          </div>
+        )}
       </div>
 
       <div className="mt-10 w-full flex-wrap flex justify-center">
         <Link href="/home">
-          <a className="btn-blue">Go to home page</a>
+          <a className="btn-blue" onClick={() => setRun(false)}>
+            Go to home page
+          </a>
         </Link>
       </div>
     </React.Fragment>
