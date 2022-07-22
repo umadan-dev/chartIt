@@ -59,7 +59,16 @@ function Next() {
         <span className="mt-4 w-full flex-wrap flex justify-center">
           ⚡ Render Chart Here ⚡
         </span>
-        <Chart packets={packets} />
+        <div className="">
+          <Chart packets={packets} channelNum={0} />
+          <Chart packets={packets} channelNum={1} />
+          <Chart packets={packets} channelNum={2} />
+          <Chart packets={packets} channelNum={3} />
+          <Chart packets={packets} channelNum={4} />
+          <Chart packets={packets} channelNum={5} />
+          <Chart packets={packets} channelNum={6} />
+          <Chart packets={packets} channelNum={7} />
+        </div>
       </div>
 
       <div className="mt-10 w-full flex-wrap flex justify-center">
