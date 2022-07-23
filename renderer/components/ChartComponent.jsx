@@ -28,7 +28,7 @@ function Chart({ data }) {
   const [dataset, setDataset] = useState([]);
 
   useEffect(() => {
-    setDataset(data.splice(-15));
+    setDataset(data.splice(-100));
   }, [data]);
 
   return (
