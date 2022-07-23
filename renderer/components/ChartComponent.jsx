@@ -7,6 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
 
@@ -27,7 +28,7 @@ function Chart({ data }) {
   const [dataset, setDataset] = useState([]);
 
   useEffect(() => {
-    setDataset(data.splice(-10));
+    setDataset(data.splice(-15));
   }, [data]);
 
   return (
@@ -37,6 +38,7 @@ function Chart({ data }) {
           width={500}
           height={300}
           data={dataset}
+          stackOffset="sign"
           margin={{
             top: 5,
             right: 30,
@@ -46,9 +48,10 @@ function Chart({ data }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="time" />
-          <YAxis />
+          <YAxis domain={[-50, 50]} />
           <Tooltip />
           <Legend />
+          <ReferenceLine y={0} stroke="#000" />
           <Bar dataKey="val" fill="#8884d8" />
         </BarChart>
       </ResponsiveContainer>
