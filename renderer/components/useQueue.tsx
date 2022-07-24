@@ -1,6 +1,11 @@
 import moment from "moment";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { Queue } from "./Queue";
+import Worker from "web-worker";
+const worker = new Worker(new URL("./worker.js", import.meta.url), {
+  type: "module",
+});
+
 export const initState = {
   one: new Queue(),
   two: new Queue(),
@@ -18,10 +23,15 @@ interface IActionType {
   key: string;
 }
 
-const queueReducer = (state: Queue, action: IActionType) => {  
-  state[action.key].enqueue({ status: +action.status, time: action.time });
-  if (state[action.key].length === 1500) {
-    state[action.key].dequeue();
+export const initStateKeys = Object.keys(initState);
+
+const queueReducer = (state: Queue, action: IActionType) => {
+  state[initStateKeys[action.key]].enqueue({
+    status: +action.status,
+    time: moment(action.time).format("h:mm:ss"),
+  });
+  if (state[initStateKeys[action.key]].length === 1250) {
+    state[initStateKeys[action.key]].dequeue();
   }
   return state;
 };
@@ -29,17 +39,12 @@ const queueReducer = (state: Queue, action: IActionType) => {
 export const useQueue = () => {
   const [state, dispatch] = useReducer<any>(queueReducer, initState);
 
-  const handleDispatcher = (data: string[]) => {
-    for (let i = 0; i < data.length - 1; i++) {
-      for (let j = 0; j < data.length - 2; j++) {
-        //@ts-ignore
-        dispatch({
-          status: +data[i][j],
-          key: Object.keys(initState)[j],
-          time: moment(data[i][8]).format("h:mm:ss"),
-        });
-      }
-    }
-  };
-  return { handleDispatcher, data: state };
+  useEffect(() => {
+    worker.onmessage = ({ data }) => {
+      //@ts-ignore
+      dispatch(data);
+    };
+  }, []);
+
+  return { data: state, worker };
 };

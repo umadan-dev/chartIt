@@ -15,7 +15,9 @@
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
     "moment": "^2.29.4",
-    "recharts": "^2.1.12"
+    "react-worker-dom": "^2.0.0-alpha.6",
+    "recharts": "^2.1.12",
+    "web-worker": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",

@@ -3,17 +3,17 @@ import Head from "next/head";
 import Link from "next/link";
 const { ipcRenderer } = require("electron");
 import { Chart } from "./../components/ChartComponent";
-import { initState, useQueue } from "../components/useQueue";
+import { initStateKeys, useQueue } from "../components/useQueue";
 
 function Next() {
   const [isActive, setActive] = useState(true);
   const [buttonText, setButtonText] = useState("Fetch Data Stream");
   const [listenerCount, setCount] = useState(0);
-  const { handleDispatcher, data } = useQueue();
+  const { data, worker } = useQueue();
 
   const getData = () => {
     ipcRenderer.on("device-data", (_event, packets) => {
-      handleDispatcher(packets);
+      worker.postMessage(packets);
       setCount((prevCount) => prevCount + 1);
     });
     ipcRenderer.on("fetch-data", (_event, message) => {
@@ -59,7 +59,7 @@ function Next() {
         <span className="mt-4 w-full flex-wrap flex justify-center">
           ⚡ Render Chart Here ⚡
         </span>
-        {Object.keys(initState).map((e) => (
+        {initStateKeys.map((e) => (
           <Chart key={e} data={Object.values(data[e].elements)} />
         ))}
       </div>
