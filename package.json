@@ -13,7 +13,10 @@
   "dependencies": {
     "csv-parse": "^5.3.0",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.0.1"
+    "electron-store": "^8.0.1",
+    "moment": "^2.29.4",
+    "recharts": "^2.1.12",
+    "web-worker": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",
