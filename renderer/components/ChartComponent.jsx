@@ -31,8 +31,8 @@ export default function Chart({packets, channelNum, showAxis}) {
   }, [packets]);
 
   return (
-    <ResponsiveContainer width="90%" height="80%">
-      <LineChart data={toBePlottedPktsArr} width={700} height={400}>
+    <ResponsiveContainer width="90%" aspect={6}>
+      <LineChart data={toBePlottedPktsArr}>
         <XAxis dataKey="time" angle="30" hide={showAxis}/>
         <YAxis type="number" domain={[-50, 50]} label={chartLabel} allowDataOverflow={false} tick={false} />
         <Line dataKey="data" stroke="orange" activeDot={{ stroke: "white" }} />
